@@ -2,6 +2,7 @@ import streamlit as st
 import gdown
 from numpy import load
 import pandas as pd
+from surprise import Dataset, Reader
 
 st.write('hello')
 
@@ -22,7 +23,8 @@ with st.spinner('downloading...'):
         gdown.download(url_2, output_2, quiet=False)
         st.write('successfully downloaded scores.csv')
 
-        st.dataframe(pd.read_csv('ScoresDF_selected.csv'))
+        # st.dataframe(pd.read_csv('ScoresDF_selected.csv'))
+        ScoresDF_selected = pd.read_csv('ScoresDF_selected.csv')
 
 
 
@@ -32,3 +34,12 @@ with st.spinner('downloading...'):
         st.write('successfully downloaded anime.csv')
 
         st.dataframe(pd.read_csv('anime_cleaned.csv'))
+
+
+    def load_trainset():
+        reader = Reader(rating_scale=(0, 10))
+        scoredata = Dataset.load_from_df(ScoresDF_selected[['username', 'anime_id', 'my_score']], reader)
+        trainset = scoredata.build_full_trainset()
+        return trainset
+
+    trainset=load_trainset()

@@ -2,3 +2,4 @@ streamlit
 numpy
 gdown
 pandas
+scikit-surprise
